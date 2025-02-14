@@ -1,15 +1,27 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useRouter } from 'expo-router'
 
 const index = () => {
+
+    const router = useRouter()
+
+    const onLogin = () => {
+        router.push('/auth/login')
+    }
+
+    const onSignUp = () => {
+        router.push('/auth/signup')
+    }
+
   return (
     <View style={styles.container}>
         <Image source={require('@/assets/chazel_hero.jpg')} style={{flex:1,objectFit:"contain",width:700}} />
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, {backgroundColor:"black", borderColor:"gray",borderWidth:1}]}>
+            <TouchableOpacity style={[styles.button, {backgroundColor:"black", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
                 <Text style={[styles.buttonText,{color:"white"}]}>Login with email</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, {backgroundColor:"white"}]}>
+            <TouchableOpacity style={[styles.button, {backgroundColor:"white"}]} onPress={onSignUp}>
                 <Text style={[styles.buttonText]}>Sign up your account </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button,{borderColor:"black",borderWidth:1}]}>

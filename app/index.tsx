@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#C7ADED"
     },
     buttonContainer:{
-        gap:20,
+        gap:10,
         flex:1,
         marginTop:36
     },

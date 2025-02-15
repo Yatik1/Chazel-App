@@ -2,8 +2,11 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useWindowDimensions } from "react-native"
 
 export default function RootLayout() {
+
+  const {height} = useWindowDimensions()
 
   const colorScheme = useColorScheme();
 
@@ -15,7 +18,7 @@ export default function RootLayout() {
         <Stack.Screen 
           name='auth/login' 
           options={{
-            presentation:"modal"
+            presentation:"modal",
           }} 
         />
 

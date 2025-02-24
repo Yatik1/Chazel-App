@@ -1,23 +1,68 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Touchable } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Touchable, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import axios from "axios"
+import { useRouter } from 'expo-router'
+
 
 const index = () => {
+
+  const router = useRouter() 
 
   const [name, setName] = useState<string>("")
   const [email,setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [confirmPassword, setConfirmPassword] = useState<string>("")
-  // const [profile, setProfile] = useState<string|null>("")
 
-  function handleLogin() {
-    let data = {
-      name,
-      email,
-      password,
-      confirmPassword,
+  const [loading, setLoading] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(true)
+
+  useEffect(() => {
+    if(name && email && password && confirmPassword) {
+      setDisabled(false)
     }
-    console.log(data)
+  } , [name,email,password,confirmPassword])
+
+  async function handleSignup() {
+
+    if(!name || !email || !password) {
+      alert("Every fields must be filled")
+      return
+    }
+
+    if(password !== confirmPassword) {
+      alert("Passwords doesn't matched")
+      return;
+    }
+
+    try {
+      setLoading(true)
+
+      const config = {
+        headers: {
+          "Content-type" : "application/json"
+        }
+      }
+
+      const {data} = await axios.post(
+        "https://chat-app-9flg.onrender.com/api/user",
+        {
+          name,
+          email,
+          password
+        },
+        config
+      )
+      console.log("Registered data : ",data)
+      alert("Registration successfull")
+      setLoading(false)
+
+      router.replace("/(authenticated)")
+      
+    } catch (error) {
+        console.log(error)
+        throw new Error("Something must have happened")
+    }
   }
 
   return (
@@ -74,8 +119,10 @@ const index = () => {
 
 
 
-          <TouchableOpacity style={[styles.button, {backgroundColor:"black",marginTop:30}]} onPress={handleLogin}>
-            <Text style={[styles.buttonText, {color:"white"}]}>Signup</Text>
+          <TouchableOpacity style={[styles.button, {backgroundColor:disabled ? "gray":"black",marginTop:30}]} onPress={handleSignup} disabled={disabled}>
+            {
+              loading ? <ActivityIndicator color="white" /> : <Text style={[styles.buttonText, {color:"white"}]}> Signup</Text>
+            }
           </TouchableOpacity>
 
       </View>

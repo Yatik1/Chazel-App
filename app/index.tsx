@@ -16,15 +16,15 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-        <Image source={require('@/assets/chazel_hero.jpg')} style={{flex:1,objectFit:"contain",width:700}} />
+        <Image source={require('@/assets/message.png')} style={{flex:1,objectFit:"contain",width:100,marginTop:100}} />
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={[styles.button, {backgroundColor:"black", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
                 <Text style={[styles.buttonText,{color:"white"}]}>Login with email</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, {backgroundColor:"white"}]} onPress={onSignUp}>
+            <TouchableOpacity style={[styles.button, {backgroundColor:"white",borderWidth:0.3}]} onPress={onSignUp}>
                 <Text style={[styles.buttonText]}>Sign up your account </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{borderColor:"black",borderWidth:1}]}>
+            <TouchableOpacity style={[styles.button,{borderColor:"black",backgroundColor:"lightgray"}]}>
                 <Text style={[styles.buttonText,{color:"drakgray"}]}>Use guest account</Text>
             </TouchableOpacity>
         </View>
@@ -41,12 +41,11 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:"#C7ADED"
+        backgroundColor:'white',
     },
     buttonContainer:{
         gap:10,
         flex:1,
-        marginTop:36
     },
     button:{
         flexDirection:'row',

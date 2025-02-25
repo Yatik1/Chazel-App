@@ -38,8 +38,8 @@ const index = () => {
               onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={{width:120, backgroundColor:"lightgray", borderWidth:0.5, padding:5, borderRadius:4, display:"flex",alignItems:"center",justifyContent:"center"}} onPress={() => setShowPassword(!showPassword)}>
-              <Text>{showPassword ? "Hide" : "Show"} Password</Text>
+            <TouchableOpacity style={{width:120, backgroundColor:"black", padding:5, borderRadius:4, display:"flex",alignItems:"center",justifyContent:"center"}} onPress={() => setShowPassword(!showPassword)}>
+              <Text style={{color:"white", fontWeight:600}}>{showPassword ? "Hide" : "Show"} Password</Text>
             </TouchableOpacity>
           </View>
 
@@ -65,8 +65,7 @@ const styles = StyleSheet.create({
   },
   header:{
     fontWeight:'800',
-    fontSize:30,
-    color:'purple'
+    fontSize:30
   },
   signedBox:{
     gap:10

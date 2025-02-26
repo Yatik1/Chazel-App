@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Touchable } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Touchable, ActivityIndicator, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import axios from "axios"
+import { useRouter } from 'expo-router'
 
 const index = () => {
 
@@ -7,12 +9,49 @@ const index = () => {
   const [password, setPassword] = useState<string>("")
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  function handleLogin() {
-    let data = {
-      email,
-      password
+  const [loading,setLoading] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(true)
+  
+  const router = useRouter()
+
+  useEffect(() => {
+    if(email && password) {
+      setDisabled(false)
     }
-    console.log(data)
+  },[email,password])
+
+  async function handleLogin() {
+
+    if(!email || !password) {
+      alert("Every fields must be filled")
+      return
+    }
+
+    try {
+      setLoading(true)
+      const config = {
+        headers:{
+          "Content-type":"application/json"
+        }
+      }
+
+      const {data} = await axios.post(
+        "https://chat-app-9flg.onrender.com/api/user/login",
+        {
+          email,password
+        },
+        config
+      )
+
+      setLoading(false)
+      router.replace("/(authenticated)")
+
+    } catch (error) {
+      setLoading(false)
+      console.log("Login error",error)
+      throw new Error("Login error")
+
+    }
   }
 
   return (
@@ -38,13 +77,13 @@ const index = () => {
               onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={{width:120, backgroundColor:"black", padding:5, borderRadius:4, display:"flex",alignItems:"center",justifyContent:"center"}} onPress={() => setShowPassword(!showPassword)}>
-              <Text style={{color:"white", fontWeight:600}}>{showPassword ? "Hide" : "Show"} Password</Text>
+            <TouchableOpacity style={{display:"flex",alignItems:"flex-end",justifyContent:"flex-end", paddingRight:10}} onPress={() => setShowPassword(!showPassword)}>
+              <Image source={showPassword ? require('@/assets/eye.png') : require('@/assets/hidden.png')} style={{width:25,height:25}} />
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor:"black",marginTop:30}]} onPress={handleLogin}>
-            <Text style={[styles.buttonText, {color:"white"}]}>Login</Text>
+          <TouchableOpacity style={[styles.button, {backgroundColor:disabled ? "lightgray":"black",marginTop:30}]} onPress={handleLogin} disabled={disabled}>
+            {loading ? <ActivityIndicator /> : <Text style={[styles.buttonText, {color:"white"}]}>Login</Text>}
           </TouchableOpacity>
 
       </View>

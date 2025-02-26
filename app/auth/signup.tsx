@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { useRouter } from 'expo-router'
@@ -53,13 +53,14 @@ const index = () => {
         },
         config
       )
-      console.log("Registered data : ",data)
+
       alert("Registration successfull")
       setLoading(false)
 
       router.replace("/(authenticated)")
       
     } catch (error) {
+        setLoading(false)
         console.log(error)
         throw new Error("Something must have happened")
     }
@@ -67,7 +68,7 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Create account 👤</Text>
+      <Text style={styles.header}>Create Account 👤</Text>
       <View style={styles.signedBox}>
           <TextInput 
             style={styles.field}
@@ -97,8 +98,8 @@ const index = () => {
               onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={{width:120, backgroundColor:"black", padding:5, borderRadius:4, display:"flex",alignItems:"center",justifyContent:"center"}} onPress={() => setShowPassword(!showPassword)}>
-              <Text style={{color:"white", fontWeight:600}}>{showPassword ? "Hide" : "Show"} Password</Text>
+            <TouchableOpacity style={{display:"flex",alignItems:"flex-end",justifyContent:"flex-end", paddingRight:10}} onPress={() => setShowPassword(!showPassword)}>
+              <Image source={showPassword ? require('@/assets/eye.png') : require('@/assets/hidden.png')} style={{width:25,height:25}} />
             </TouchableOpacity>
           </View> 
 
@@ -106,20 +107,20 @@ const index = () => {
             <TextInput 
               style={styles.field}
               autoCapitalize='none'
-              placeholder='Password'
+              placeholder='Confirm Password'
               secureTextEntry={!showPassword}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
             />
 
-            <TouchableOpacity style={{width:120, backgroundColor:"black", padding:5, borderRadius:4, display:"flex",alignItems:"center",justifyContent:"center"}} onPress={() => setShowPassword(!showPassword)}>
-              <Text style={{color:"white", fontWeight:600}}>{showPassword ? "Hide" : "Show"} Password</Text>
+            <TouchableOpacity style={{display:"flex",alignItems:"flex-end",justifyContent:"flex-end", paddingRight:10}} onPress={() => setShowPassword(!showPassword)}>
+              <Image source={showPassword ? require('@/assets/eye.png') : require('@/assets/hidden.png')} style={{width:25,height:25}} />
             </TouchableOpacity>
           </View>
 
 
 
-          <TouchableOpacity style={[styles.button, {backgroundColor:disabled ? "gray":"black",marginTop:30}]} onPress={handleSignup} disabled={disabled}>
+          <TouchableOpacity style={[styles.button, {backgroundColor:disabled ? "lightgray":"black",marginTop:30}]} onPress={handleSignup} disabled={disabled}>
             {
               loading ? <ActivityIndicator color="white" /> : <Text style={[styles.buttonText, {color:"white"}]}> Signup</Text>
             }

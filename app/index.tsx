@@ -1,11 +1,16 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
+import axios from "axios"
 
 const index = () => {
 
     const router = useRouter()
 
+    const theme = useColorScheme() === 'light'  ? 'light' : 'dark'
+    const islight = theme === 'light' ? true : false
+
+    const [loading, setLoading] = useState<boolean>(false)
 
     const onLogin = () => {
         router.push('/auth/login')
@@ -17,12 +22,30 @@ const index = () => {
 
     const onGuest = async () => {
       try {
+        setLoading(true)
+
         let data = {
           email:"guest@example.com",
           password:"123456"
         }
-        console.log("Guest data",data)
+
+        const config = {
+          headers : {
+            "Content-type":"application/json"
+          }
+        }
+
+        await axios.post(
+          "https://chat-app-9flg.onrender.com/api/user/login",
+          data,
+          config
+        )
+
+        setLoading(false)
+        router.replace("/(authenticated)")
+
       } catch (error) {
+        setLoading(false)
         console.log("Guest user error", error)
         throw new Error("Guest user error")
       }
@@ -31,16 +54,16 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-        <Image source={require('@/assets/message.png')} style={{flex:1,objectFit:"contain",width:100,marginTop:100}} />
+        <Image source={islight ? require('@/assets/message.png') : require('@/assets/message-light.png') } style={{flex:1,objectFit:"contain",width:100,marginTop:100}} />
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, {backgroundColor:"black", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
-                <Text style={[styles.buttonText,{color:"white"}]}>Login with email</Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor:islight ? "black" : "white", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
+                <Text style={[styles.buttonText,{color:islight? "white":"black"}]}>Login with email</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, {backgroundColor:"white",borderWidth:0.3}]} onPress={onSignUp}>
-                <Text style={[styles.buttonText]}>Create your account </Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor:islight ? "white" : "black",borderWidth:0.3, borderColor:islight ? "black" : "white"}]} onPress={onSignUp}>
+                <Text style={[styles.buttonText , {color:islight?"black":"white"}]}>Create your account </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{borderColor:"black",backgroundColor:"lightgray"}]} onPress={onGuest}>
-                <Text style={[styles.buttonText,{color:"drakgray"}]}>Use Guest account</Text>
+            <TouchableOpacity style={[styles.button,{backgroundColor:"lightgray"}]} onPress={onGuest}>
+                {loading ? <ActivityIndicator /> : <Text style={[styles.buttonText]}>Use Guest account</Text>}
             </TouchableOpacity>
         </View>
     </View>
@@ -56,7 +79,6 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'white',
     },
     buttonContainer:{
         gap:10,

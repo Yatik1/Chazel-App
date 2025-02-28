@@ -1,16 +1,28 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, useColorScheme } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import axios from "axios"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const index = () => {
 
     const router = useRouter()
 
-    const theme = useColorScheme() === 'light'  ? 'light' : 'dark'
-    const islight = theme === 'light' ? true : false
+    // const theme = useColorScheme() === 'light'  ? 'light' : 'dark'
+    // const islight = theme === 'light' ? true : false
 
     const [loading, setLoading] = useState<boolean>(false)
+
+    useEffect(() => {
+      isUser()
+    } , [loading])
+
+    async function isUser() {
+      const user = JSON.parse(await AsyncStorage.getItem("userInfo") as string)
+      if(user) {
+        router.replace("/(authenticated)/(tabs)/chats")
+      }
+    }
 
     const onLogin = () => {
         router.push('/auth/login')
@@ -42,7 +54,7 @@ const index = () => {
         )
 
         setLoading(false)
-        router.replace("/(authenticated)")
+        router.replace("/(authenticated)/(tabs)/chats")
 
       } catch (error) {
         setLoading(false)
@@ -54,13 +66,13 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-        <Image source={islight ? require('@/assets/message.png') : require('@/assets/message-light.png') } style={{flex:1,objectFit:"contain",width:100,marginTop:100}} />
+        <Image source={require('@/assets/message.png') } style={{flex:1,objectFit:"contain",width:100,marginTop:100}} />
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, {backgroundColor:islight ? "black" : "white", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
-                <Text style={[styles.buttonText,{color:islight? "white":"black"}]}>Login with email</Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor:"black", borderColor:"gray",borderWidth:1}]} onPress={onLogin}>
+                <Text style={[styles.buttonText,{color:"white"}]}>Login with email</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, {backgroundColor:islight ? "white" : "black",borderWidth:0.3, borderColor:islight ? "black" : "white"}]} onPress={onSignUp}>
-                <Text style={[styles.buttonText , {color:islight?"black":"white"}]}>Create your account </Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor:"white",borderWidth:0.3, borderColor:"black"}]} onPress={onSignUp}>
+                <Text style={[styles.buttonText , {color:"black"}]}>Create your account </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button,{backgroundColor:"lightgray"}]} onPress={onGuest}>
                 {loading ? <ActivityIndicator /> : <Text style={[styles.buttonText]}>Use Guest account</Text>}
@@ -79,6 +91,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'center',
         justifyContent:'center',
+        backgroundColor:'white'
     },
     buttonContainer:{
         gap:10,

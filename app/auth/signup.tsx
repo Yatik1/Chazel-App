@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { useRouter } from 'expo-router'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const index = () => {
@@ -56,8 +57,8 @@ const index = () => {
 
       alert("Registration successfull")
       setLoading(false)
-
-      router.replace("/(authenticated)")
+      await AsyncStorage.setItem("userInfo", JSON.stringify(data))
+      router.replace("/(authenticated)/(tabs)/chats")
       
     } catch (error) {
         setLoading(false)

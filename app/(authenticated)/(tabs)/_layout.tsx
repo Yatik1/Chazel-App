@@ -28,7 +28,7 @@ export default function Layout() {
                     title:"Chats",
                     tabBarIcon:({color}) => <Entypo name="chat" size={24} color={color} />,
                     headerStyle:{
-                        height:105,
+                        height:100,
                     },
                     headerTitleStyle:{
                         fontSize:40,
@@ -42,6 +42,7 @@ export default function Layout() {
                 name="browse/index" 
                 options={{
                     title:"Browse",
+                    headerTitleAlign:"left",
                     headerTitle:() => <SearchField />,
                     tabBarIcon:({color}) => <MaterialCommunityIcons name="web" size={24} color={color} />,
                 }}
@@ -60,9 +61,22 @@ export default function Layout() {
 
 function SearchField(){
     return(
-            <View style={{flexDirection:"row", alignItems:"center"}}>
-                <AntDesign name="search1" size={24} color="black" />
-                <TextInput />
+            <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-around", gap:10,padding:3}}>
+                <AntDesign name="search1" size={20} color="#1E1E1E" />
+                <TextInput 
+                    style={{
+                        paddingVertical:5,
+                        paddingHorizontal:10,
+                        borderWidth:0.5,
+                        borderRadius:5,
+                        width:300,
+                        fontSize:14,
+                        borderColor:"lightgray"
+                    }}
+                    autoCapitalize='words'
+                    placeholder='Browse...'
+                    keyboardType='default'
+                />
             </View>
 
     )

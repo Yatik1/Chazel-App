@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ChatState } from '@/context/ChatProvider';
 
 const index = () => {
 
     const router = useRouter()
+    const {user,setUser} = ChatState() as any
 
     // const theme = useColorScheme() === 'light'  ? 'light' : 'dark'
     // const islight = theme === 'light' ? true : false
@@ -36,7 +38,7 @@ const index = () => {
       try {
         setLoading(true)
 
-        let data = {
+        let creds = {
           email:"guest@example.com",
           password:"123456"
         }
@@ -47,14 +49,17 @@ const index = () => {
           }
         }
 
-        await axios.post(
+        const {data} = await axios.post(
           "https://chat-app-9flg.onrender.com/api/user/login",
-          data,
+          creds,
           config
         )
 
+        setUser(data)
         setLoading(false)
+        console.log(user)
         router.replace("/(authenticated)/(tabs)/chats")
+        await AsyncStorage.setItem("userInfo", JSON.stringify(data))
 
       } catch (error) {
         setLoading(false)

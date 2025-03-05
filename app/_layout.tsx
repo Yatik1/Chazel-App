@@ -1,4 +1,5 @@
 
+import ChatProvider from '@/context/ChatProvider';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 
@@ -7,6 +8,7 @@ export default function RootLayout() {
 
 
   return (
+    <ChatProvider>
       <Stack screenOptions={{headerShown:false}}>
         <Stack.Screen name='index' />
 
@@ -28,5 +30,6 @@ export default function RootLayout() {
           name='(authenticated)'
         />
       </Stack>
+    </ChatProvider>
   );
 }

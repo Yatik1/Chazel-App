@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ChatState } from '@/context/ChatProvider';
+import UserType from '@/types/user';
 
 
 const index = () => {
@@ -17,6 +19,8 @@ const index = () => {
 
   const [loading, setLoading] = useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(true)
+
+  const {setUser} = ChatState() as {setUser:React.Dispatch<React.SetStateAction<UserType>>}
 
   useEffect(() => {
     if(name && email && password && confirmPassword) {
@@ -55,7 +59,7 @@ const index = () => {
         config
       )
 
-      alert("Registration successfull")
+      setUser(data)
       setLoading(false)
       await AsyncStorage.setItem("userInfo", JSON.stringify(data))
       router.replace("/(authenticated)/(tabs)/chats")

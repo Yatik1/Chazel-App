@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ChatState } from '@/context/ChatProvider';
+import UserType from '@/types/user';
 
 const index = () => {
 
@@ -12,6 +14,8 @@ const index = () => {
 
   const [loading,setLoading] = useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(true)
+
+  const {user,setUser} = ChatState() as {user:UserType , setUser:React.Dispatch<React.SetStateAction<UserType>>}
   
   const router = useRouter()
 
@@ -44,7 +48,9 @@ const index = () => {
         config
       )
 
+      setUser(data)
       setLoading(false)
+      console.log(user)
       router.replace("/(authenticated)/(tabs)/chats")
       await AsyncStorage.setItem("userInfo", JSON.stringify(data))
 
@@ -52,7 +58,6 @@ const index = () => {
       setLoading(false)
       console.log("Login error",error)
       throw new Error("Login error")
-
     }
   }
 

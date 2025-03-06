@@ -1,7 +1,17 @@
+import UserType from "@/types/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-const ChatContext = createContext({});
+export interface ContextType {
+    user: UserType | null,
+    setUser: React.Dispatch<React.SetStateAction<UserType>>,
+    selectedChat: any,
+    setSelectedChat: React.Dispatch<React.SetStateAction<any>>,
+    chats: any,
+    setChats: React.Dispatch<React.SetStateAction<any>>
+}
+
+const ChatContext = createContext<ContextType | {}>({});
 
 const ChatProvider = ({children}:{children:React.ReactNode}) => {
     const [user, setUser] = useState(null)
@@ -19,7 +29,9 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
     } , [])
 
     return(
-        <ChatContext.Provider value={{user, setUser, selectedChat, setSelectedChat, chats, setChats}}>
+        <ChatContext.Provider 
+            value={{user, setUser, selectedChat, setSelectedChat, chats, setChats}}
+        >
             {children}
         </ChatContext.Provider>
     )

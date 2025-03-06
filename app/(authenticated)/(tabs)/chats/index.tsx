@@ -6,12 +6,11 @@ import Chats from '@/component/Chats'
 
 const index = () => {
 
-  const [fetchAgain,setFetchAgain] = React.useState<boolean>(false)
   const {user} = ChatState() as {user:UserType}
 
   return (
     <View style={{flex:1}}>
-      {user && <Chats fetchAgain={fetchAgain} />}
+      {user && <Chats />}
     </View>
   )
 }

@@ -5,7 +5,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getSender } from '@/config/ChatLogics'
 
-const Chats = ({fetchAgain} : {fetchAgain:boolean}) => {
+const Chats = () => {
 
     const [loggedUser, setLoggedUser] = React.useState()
     const {selectedChat,setSelectedChat,user,chats,setChats} = ChatState() as ContextType
@@ -29,7 +29,7 @@ const Chats = ({fetchAgain} : {fetchAgain:boolean}) => {
 
     useEffect(() => {
         fetchChats()
-    }, [fetchAgain])
+    }, [])
 
     const renderItem = ({item:chat}: {item: any}) => (
         <TouchableOpacity
@@ -39,7 +39,7 @@ const Chats = ({fetchAgain} : {fetchAgain:boolean}) => {
                 { backgroundColor: selectedChat === chat ? "black" : "#E8E8E8" }
             ]}
         >
-            <Text style={{ color: selectedChat === chat ? "white" : "black" }}>
+            <Text style={{ color: selectedChat === chat ? "white" : "black" , fontSize:15}}>
                 {!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}
             </Text>
         </TouchableOpacity>
@@ -61,11 +61,15 @@ export default Chats
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+        padding:8,
     },
     chatItem: {
         padding: 10,
-        borderRadius: 10,
-        marginVertical: 5,
+        borderRadius: 4,
+        marginVertical: 4,
+        height:40,
+        display:"flex",
+        alignItems:"flex-start",
+        justifyContent:"center"
     },
 })

@@ -20,7 +20,6 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
 
     async function getUserInfo()  {
         const userInfo = await AsyncStorage.getItem("userInfo")
-        console.log(userInfo)
         setUser(JSON.parse(userInfo!))
     }
 

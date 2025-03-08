@@ -57,7 +57,6 @@ const index = () => {
 
         setUser(data)
         setLoading(false)
-        console.log(user)
         router.replace("/(authenticated)/(tabs)/chats")
         await AsyncStorage.setItem("userInfo", JSON.stringify(data))
 

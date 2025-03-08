@@ -57,8 +57,8 @@ const index = () => {
 
         setUser(data)
         setLoading(false)
-        router.replace("/(authenticated)/(tabs)/chats")
         await AsyncStorage.setItem("userInfo", JSON.stringify(data))
+        router.replace("/(authenticated)/(tabs)/chats")
 
       } catch (error) {
         setLoading(false)

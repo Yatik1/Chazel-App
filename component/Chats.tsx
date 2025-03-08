@@ -4,6 +4,8 @@ import { ChatState, ContextType } from '@/context/ChatProvider'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getSender } from '@/config/ChatLogics'
+import Avatar from './Avatar'
+
 
 const Chats = () => {
 
@@ -31,19 +33,26 @@ const Chats = () => {
         fetchChats()
     }, [])
 
-    const renderItem = ({item:chat}: {item: any}) => (
-        <TouchableOpacity
-            onPress={() => setSelectedChat(chat)}
-            style={[
-                styles.chatItem,
-                { backgroundColor: selectedChat === chat ? "black" : "#E8E8E8" }
-            ]}
-        >
-            <Text style={{ color: selectedChat === chat ? "white" : "black" , fontSize:15}}>
-                {!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}
-            </Text>
-        </TouchableOpacity>
-    )
+    const renderItem = ({item:chat}: {item: any}) => {
+        let sender = !chat.isGroupChat ? getSender(loggedUser, chat.users) : chat
+
+        return (
+            (
+                <TouchableOpacity
+                    onPress={() => setSelectedChat(chat)}
+                    style={[
+                        styles.chatItem,
+                        { backgroundColor: selectedChat === chat ? "black" : "#E8E8E8" }
+                    ]}
+                >
+                    <Avatar sender={sender} /> 
+                    <Text style={{ color: selectedChat === chat ? "white" : "black" , fontSize:17, fontWeight:"500"}}>
+                        {!chat.isGroupChat ? sender.name : sender.chatName}
+                    </Text>
+                </TouchableOpacity>
+        )
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -58,18 +67,23 @@ const Chats = () => {
 
 export default Chats
 
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding:8,
     },
     chatItem: {
-        padding: 10,
-        borderRadius: 4,
+        paddingHorizontal:6,
+        paddingVertical: 10,
+        borderRadius: 18,
         marginVertical: 4,
-        height:40,
+        height:49,
         display:"flex",
-        alignItems:"flex-start",
-        justifyContent:"center"
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"flex-start",
+        gap:8
     },
 })

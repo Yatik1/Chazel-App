@@ -1,23 +1,6 @@
 import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
-
-interface ChatUserType {
-    _id:string,
-    name:string, 
-    email:string,
-    pic:string | null,
-    isAdmin:boolean
-}
-
-type SenderProps = {
-    chatName:string,
-    groupAdmin:ChatUserType,
-    isGroupChat:boolean,
-    users:ChatUserType[],
-    _id:string
-
-}
-
+import { ChatUserType, SenderProps } from '@/types/user'
 
 function Avatar({sender}: {sender: SenderProps | ChatUserType}) {
 

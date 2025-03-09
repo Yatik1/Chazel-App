@@ -1,20 +1,26 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChatState, ContextType } from '@/context/ChatProvider'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getSender } from '@/config/ChatLogics'
 import Avatar from './Avatar'
+import ChatsLoader from './loaders/ChatsLoader'
+import { useRouter } from 'expo-router'
 
 
 const Chats = () => {
 
-    const [loggedUser, setLoggedUser] = React.useState()
+    const router = useRouter()
+
+    const [loading, setLoading] = useState<boolean>(true)
+
+    const [loggedUser, setLoggedUser] = useState()
     const {selectedChat,setSelectedChat,user,chats,setChats} = ChatState() as ContextType
 
     const fetchChats = async () => {
+        setLoading(true)
         setLoggedUser(JSON.parse(await AsyncStorage.getItem("userInfo") as string))
-
         try {
             const config = {
                 headers: {
@@ -26,6 +32,8 @@ const Chats = () => {
             setChats(data)
         } catch (error) {
             console.log("Error in fetching chats",error)
+        } finally{
+            setLoading(false)
         }
     }
 
@@ -33,13 +41,18 @@ const Chats = () => {
         fetchChats()
     }, [])
 
+    function navigateToChat(chat:any) {
+        setSelectedChat(chat)
+        router.push(`/chats/${chat._id}`)
+    }
+
     const renderItem = ({item:chat}: {item: any}) => {
         let sender = !chat.isGroupChat ? getSender(loggedUser, chat.users) : chat
 
         return (
             (
                 <TouchableOpacity
-                    onPress={() => setSelectedChat(chat)}
+                    onPress={() => navigateToChat(chat)}
                     style={[
                         styles.chatItem,
                         { backgroundColor: selectedChat === chat ? "black" : "#E8E8E8" }
@@ -56,11 +69,19 @@ const Chats = () => {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={chats}
-                renderItem={renderItem}
-                keyExtractor={(item) => item._id}
-            />
+                {
+                    loading ? (
+                        <ChatsLoader />
+                    ) 
+                    : 
+                    (
+                        <FlatList
+                            data={chats}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item._id}
+                        />
+                    )
+                }
         </View>
     )
 }

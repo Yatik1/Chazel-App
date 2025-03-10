@@ -1,4 +1,4 @@
-import { ChatState } from "@/context/ChatProvider";
+import ChatHeader from "@/component/ChatHeader";
 import { Stack } from "expo-router";
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,9 +14,7 @@ export default function Layout() {
             <Stack.Screen 
                 name="[chatId]"
                 options={{
-                    headerTitle:"Chat",
-                    headerBackButtonDisplayMode:"minimal",
-                    headerTintColor:"black"
+                    header:() => <ChatHeader />,
                 }}
             />
         </Stack>

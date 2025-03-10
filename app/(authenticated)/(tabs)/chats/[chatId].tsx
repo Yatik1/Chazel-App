@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
+import ChatHeader from '@/component/ChatHeader'
 
 const Page = () => {
   
@@ -13,3 +14,4 @@ const Page = () => {
 }
 
 export default Page
+

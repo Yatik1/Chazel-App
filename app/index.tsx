@@ -8,10 +8,7 @@ import { ChatState } from '@/context/ChatProvider';
 const index = () => {
 
     const router = useRouter()
-    const {user,setUser} = ChatState() as any
-
-    // const theme = useColorScheme() === 'light'  ? 'light' : 'dark'
-    // const islight = theme === 'light' ? true : false
+    const {setUser} = ChatState() as any
 
     const [loading, setLoading] = useState<boolean>(false)
 

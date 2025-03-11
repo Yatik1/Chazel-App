@@ -2,9 +2,7 @@
 import ChatProvider from '@/context/ChatProvider';
 import { Stack } from 'expo-router';
 
-
 export default function RootLayout() {
-
 
   return (
     <ChatProvider>

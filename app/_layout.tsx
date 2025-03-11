@@ -1,7 +1,6 @@
 
 import ChatProvider from '@/context/ChatProvider';
 import { Stack } from 'expo-router';
-import 'react-native-reanimated';
 
 
 export default function RootLayout() {

@@ -4,11 +4,13 @@ import { useRouter } from 'expo-router'
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChatState } from '@/context/ChatProvider';
+import UserType from '@/types/user';
 
 const index = () => {
 
     const router = useRouter()
-    const {setUser} = ChatState() as any
+    
+    const {setUser} = ChatState() as {setUser : React.Dispatch<React.SetStateAction<UserType>>}
 
     const [loading, setLoading] = useState<boolean>(false)
 

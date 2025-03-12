@@ -4,16 +4,20 @@ import { ChatState } from '@/context/ChatProvider'
 import axios from 'axios'
 import Avatar from '@/component/Avatar'
 import { useRouter } from 'expo-router'
+import ChatsLoader from '@/component/loaders/ChatsLoader'
 
 const index = () => {
  
-  const {user,chats,setChats,setSelectedChat} = ChatState() as any
+  const {user,chats,setChats,setSelectedChat,searchResult} = ChatState() as any
+  const [loading, setLoading]  = useState<boolean>(true)
+
 
   const [allUsers,setAllUsers] = useState<[]>([])
   const router = useRouter()
 
   const getAll = async () => {
     try {
+      setLoading(true)
 
       const config = {
         headers: {
@@ -21,16 +25,23 @@ const index = () => {
         }
       }
 
+      if(searchResult.length) {
+        setAllUsers(searchResult)
+        return;
+      }
+
       const {data} = await axios.get(`https://chat-app-9flg.onrender.com/api/user`, config)
       setAllUsers(data)
     } catch (error) {
       console.log("Error occured",error)
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     getAll()
-  } , [])
+  } , [searchResult])
 
   const accessChat = async (userId:string) => {
     try {
@@ -67,11 +78,18 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={allUsers}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
+      {
+        loading ? <ChatsLoader /> : (
+          <>
+            {searchResult.length ? <Text style={styles.textMessage}>Search found</Text> : <Text style={styles.textMessage}>All users</Text>}
+            <FlatList
+              data={allUsers}
+              renderItem={renderItem}
+              keyExtractor={(item) => item._id}
+            />
+          </>
+        )
+      }
     </View>
   )
 }
@@ -98,4 +116,9 @@ const styles= StyleSheet.create({
     gap:8,
     backgroundColor:"#E8E8E8"
 },
+  textMessage : {
+    fontSize:22,
+    fontWeight:"bold",
+    fontStyle:"italic"
+  }
 })

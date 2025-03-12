@@ -3,6 +3,9 @@ import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ChatState } from "@/context/ChatProvider";
+import axios from "axios";
 
 
 export default function Layout() {
@@ -34,7 +37,7 @@ export default function Layout() {
                 options={{
                     title:"Browse",
                     headerTitleAlign:"left",
-                    headerTitle:() => <SearchField />,
+                    headerTitle:() => <BrowseField />,
                     tabBarIcon:({color}) => <MaterialCommunityIcons name="web" size={24} color={color} />,
                 }}
             />
@@ -50,7 +53,37 @@ export default function Layout() {
     )
 }
 
-function SearchField(){
+function BrowseField(){
+    const [search,setSearch] = useState("")
+    const {user,searchResult,setSearchResult} = ChatState() as any
+
+
+    const searchedUser = async () => {
+        if(!search || search === " ") {
+            console.log("Nothing to be search for...")
+            setSearchResult([])
+            return;
+        }
+
+        try {
+            
+            const config = {
+                headers : {
+                    Authorization : `Bearer ${user.token}`
+                }
+            }
+
+            const {data} = await axios.get(`https://chat-app-9flg.onrender.com/api/user?search=${search}` , config)
+            setSearchResult(data)
+        } catch (error) {
+            console.log("Error in seaching", error)
+        }
+    }
+    
+    useEffect(() => {
+        searchedUser()
+    } , [search]) 
+
     return(
             <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-around", gap:10,padding:3}}>
                 <AntDesign name="search1" size={20} color="#1E1E1E" />
@@ -67,6 +100,8 @@ function SearchField(){
                     autoCapitalize='words'
                     placeholder='Browse...'
                     keyboardType='default'
+                    value={search}
+                    onChangeText={setSearch}
                 />
             </View>
 

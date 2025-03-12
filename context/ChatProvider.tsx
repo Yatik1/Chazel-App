@@ -8,7 +8,9 @@ export interface ContextType {
     selectedChat: any,
     setSelectedChat: React.Dispatch<React.SetStateAction<any>>,
     chats: any,
-    setChats: React.Dispatch<React.SetStateAction<any>>
+    setChats: React.Dispatch<React.SetStateAction<any>>,
+    searchResult : [],
+    setSearchResult :  []
 }
 
 const ChatContext = createContext<ContextType | {}>({});
@@ -17,6 +19,8 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
     const [user, setUser] = useState(null)
     const [selectedChat, setSelectedChat] = useState(null)
     const [chats,setChats] = useState([])
+    const [searchResult , setSearchResult] = useState([])
+
 
     async function getUserInfo()  {
         const userInfo = await AsyncStorage.getItem("userInfo")
@@ -29,7 +33,7 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
 
     return(
         <ChatContext.Provider 
-            value={{user, setUser, selectedChat, setSelectedChat, chats, setChats}}
+            value={{user, setUser, selectedChat, setSelectedChat, chats, setChats, searchResult,setSearchResult}}
         >
             {children}
         </ChatContext.Provider>

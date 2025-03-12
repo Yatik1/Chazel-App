@@ -29,7 +29,7 @@ const index = () => {
         </View>
       </View>
       <TouchableOpacity style={styles.button} onPress={logout}>
-        <Text style={styles.buttonText}>Logout your account</Text>
+        <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
     </View>
   )

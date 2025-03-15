@@ -1,4 +1,4 @@
-import ChatHeader from "@/component/ChatHeader";
+import ChatHeader from "@/components/ChatHeader";
 import { Stack } from "expo-router";
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

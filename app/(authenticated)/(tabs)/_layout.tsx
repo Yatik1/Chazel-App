@@ -2,7 +2,7 @@ import { Tabs, usePathname } from "expo-router";
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import BrowseField from "@/component/BrowseField";
+import BrowseField from "@/components/BrowseField";
 import { useNavigationState } from "@react-navigation/native";
 
 

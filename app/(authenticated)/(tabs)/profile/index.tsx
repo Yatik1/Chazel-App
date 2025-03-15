@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
 import { ChatState } from '@/context/ChatProvider'
 import UserType from '@/types/user'
-import Avatar from '@/component/Avatar'
+import Avatar from '@/components/Avatar'
 
 const index = () => {
 

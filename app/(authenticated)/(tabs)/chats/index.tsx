@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { ChatState } from '@/context/ChatProvider'
 import UserType from '@/types/user'
-import Chats from '@/component/Chats'
+import Chats from '@/components/Chats'
 
 const index = () => {
 

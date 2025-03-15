@@ -2,9 +2,9 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '@/context/ChatProvider'
 import axios from 'axios'
-import Avatar from '@/component/Avatar'
+import Avatar from '@/components/Avatar'
 import { useRouter } from 'expo-router'
-import ChatsLoader from '@/component/loaders/ChatsLoader'
+import ChatsLoader from '@/components/loaders/ChatsLoader'
 
 const index = () => {
  

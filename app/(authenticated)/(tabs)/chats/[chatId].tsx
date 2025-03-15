@@ -1,15 +1,17 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ChatBox from '@/components/ChatBox';
 
 const Page = () => {
   
   const {chatId} = useLocalSearchParams<{chatId:string}>()
+
   return (
     <View style={{flex:1, alignItems:'center', justifyContent:'space-between', backgroundColor:"white"}}>
-      <Text>chatId: {chatId}</Text>
+      <ChatBox />
       <Field />
     </View>
   )
@@ -17,15 +19,18 @@ const Page = () => {
 
 export default Page
 
-function Field() {
+
+
+const Field = () => {
 
   const {bottom} = useSafeAreaInsets()
+  const OS = Platform.OS;
   
   const [message, setMessage] = useState<string>("")
   const isMessage = message.length > 0;
 
   return (
-    <View style={[styles.wrapper, {paddingBottom:bottom-8}]}>
+    <View style={[styles.wrapper, {paddingBottom:OS === "ios" ? bottom-8 : bottom+15}]}>
       <TextInput 
         style={styles.field}
         placeholder='Message....'

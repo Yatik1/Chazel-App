@@ -7,10 +7,11 @@ import { ChatState } from '@/context/ChatProvider';
 import axios from 'axios';
 
 const Page = () => {
+  const [messages, setMessages] = useState<string[]>([])
   return (
     <View style={{flex:1, alignItems:'center', justifyContent:'space-between', backgroundColor:"white"}}>
-      <ChatBox />
-      <Field />
+      <ChatBox messages={messages} setMessages={setMessages}/>
+      <Field messages={messages} setMessages={setMessages} />
     </View>
   )
 }
@@ -19,13 +20,13 @@ export default Page
 
 
 
-const Field = () => {
+const Field = ({messages,setMessages} : {messages:string[],setMessages:React.Dispatch<React.SetStateAction<string[]>>}) => {
 
   const {bottom} = useSafeAreaInsets()
   const OS = Platform.OS;
   
   const {user,selectedChat} = ChatState() as any
-  const [messages, setMessages] = useState<any[]>([])
+
   const [newMessage, setNewMessage] = useState<string>("")
 
   const sendMessage = async () => {

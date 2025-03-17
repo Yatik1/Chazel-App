@@ -1,14 +1,12 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native'
+import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ChatBox from '@/components/ChatBox';
+import { ChatState } from '@/context/ChatProvider';
+import axios from 'axios';
 
 const Page = () => {
-  
-  const {chatId} = useLocalSearchParams<{chatId:string}>()
-
   return (
     <View style={{flex:1, alignItems:'center', justifyContent:'space-between', backgroundColor:"white"}}>
       <ChatBox />
@@ -26,8 +24,33 @@ const Field = () => {
   const {bottom} = useSafeAreaInsets()
   const OS = Platform.OS;
   
-  const [message, setMessage] = useState<string>("")
-  const isMessage = message.length > 0;
+  const {user,selectedChat} = ChatState() as any
+  const [messages, setMessages] = useState<any[]>([])
+  const [newMessage, setNewMessage] = useState<string>("")
+
+  const sendMessage = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": 'application/json',
+          Authorization : `Bearer ${user.token}`
+        }
+      }
+
+      setNewMessage("")
+
+      const {data} = await axios.post("https://chat-app-9flg.onrender.com/api/message" , {
+        content:newMessage,
+        chatId: selectedChat._id
+      },
+      config
+    )
+    setMessages([...messages, data])
+
+    } catch (error) {
+      console.log("Error in sending Message", error)
+    }
+  }
 
   return (
     <View style={[styles.wrapper, {paddingBottom:OS === "ios" ? bottom-8 : bottom+15}]}>
@@ -35,14 +58,14 @@ const Field = () => {
         style={styles.field}
         placeholder='Message....'
         keyboardType='default'
-        value={message}
-        onChangeText={setMessage}
+        value={newMessage}
+        onChangeText={setNewMessage}
         autoCapitalize='none'
         autoCorrect={false}
         autoFocus={false}
       />
-      {isMessage && (
-        <TouchableOpacity style={styles.outerCircle} onPress={() => console.log(message)}>
+      {newMessage.length > 0 && (
+        <TouchableOpacity style={styles.outerCircle} onPress={sendMessage}>
           <Ionicons name="send" size={24} color="white" />
         </TouchableOpacity>
       )}

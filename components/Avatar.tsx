@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import UserType, { ChatUserType, SenderProps } from '@/types/user'
 
-function Avatar({sender}: {sender: SenderProps | ChatUserType | UserType}) {
+function Avatar({sender, color}: {sender: SenderProps | ChatUserType | UserType, color:string}) {
 
     function getInitials(sender:any) {
         if(sender.isGroupChat) {
@@ -18,7 +18,7 @@ function Avatar({sender}: {sender: SenderProps | ChatUserType | UserType}) {
             'pic' in sender && sender.pic ? 
                 <Image source={{uri:sender.pic}} style={styles.avatar} /> 
                 : 
-                <View style={styles.avatar}>
+                <View style={[styles.avatar, {backgroundColor:color}]}>
                     <Text style={styles.avatarText}>{creds}</Text>
                 </View>
     )
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
         alignItems:"center",
         objectFit:"cover",
         overflow:"hidden",
-        backgroundColor:"#555555"
     },
     avatarText:{
         color:"white", 

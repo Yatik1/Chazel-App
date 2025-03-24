@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router'
 import { ChatState } from '@/context/ChatProvider'
 import UserType from '@/types/user'
 import Avatar from '@/components/Avatar'
+import { getRandomHexColor } from '@/config/ChatLogics'
 
 const index = () => {
 
@@ -25,7 +26,7 @@ const index = () => {
             <Text style={{fontSize:20,fontWeight:"500"}}>{user.name}</Text>
             <Text style={{fontSize:11}}>{user.email}</Text>
           </View>
-          <Avatar sender={user} />
+          <Avatar sender={user} color={getRandomHexColor()} />
         </View>
       </View>
       <TouchableOpacity style={styles.button} onPress={logout}>

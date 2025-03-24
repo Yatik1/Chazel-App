@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ChatState, ContextType } from '@/context/ChatProvider'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getSender } from '@/config/ChatLogics'
+import { getRandomHexColor, getSender } from '@/config/ChatLogics'
 import Avatar from './Avatar'
 import ChatsLoader from './loaders/ChatsLoader'
 import { useRouter } from 'expo-router'
@@ -48,7 +48,7 @@ const Chats = () => {
 
     const renderItem = ({item:chat}: {item: any}) => {
         let sender = !chat.isGroupChat ? getSender(loggedUser, chat.users) : chat
-
+        let color = getRandomHexColor()
         return (
             (
                 <TouchableOpacity
@@ -58,7 +58,7 @@ const Chats = () => {
                         { backgroundColor: selectedChat === chat ? "black" : "#E8E8E8" }
                     ]}
                 >
-                    <Avatar sender={sender} /> 
+                    <Avatar sender={sender} color={color}/> 
                     <Text style={{ color: selectedChat === chat ? "white" : "black" , fontSize:17, fontWeight:"500"}}>
                         {!chat.isGroupChat ? sender.name : sender.chatName}
                     </Text>

@@ -17,7 +17,8 @@ const AllChats = ({messages} : {messages:any[]}) => {
                         backgroundColor: `${
                             message.sender._id === user._id ? "lightgray" : "black"
                         }`,
-                        marginLeft: isSameSenderMargin(messages, message,index, user._id),
+                        marginLeft: message.sender._id == user._id ? "auto" : 0,
+                        marginRight:message.sender._id !== user._id ? "auto" : 0,
                         marginTop: 9,
                         borderRadius : 20,
                         paddingVertical: 10,

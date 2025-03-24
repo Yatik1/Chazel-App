@@ -5,6 +5,7 @@ import axios from 'axios'
 import Avatar from '@/components/Avatar'
 import { useRouter } from 'expo-router'
 import ChatsLoader from '@/components/loaders/ChatsLoader'
+import { getRandomHexColor } from '@/config/ChatLogics'
 
 const index = () => {
  
@@ -70,7 +71,7 @@ const index = () => {
 
    return (
       <TouchableOpacity style={styles.chatItem} onPress={() => accessChat(user._id)}>
-        <Avatar sender={user}/>
+        <Avatar sender={user} color={getRandomHexColor()}/>
         <Text style={{fontSize:16,fontWeight:'500'}}>{user.name}</Text>
       </TouchableOpacity>
    )

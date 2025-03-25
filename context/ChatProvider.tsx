@@ -20,9 +20,6 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
     const [selectedChat, setSelectedChat] = useState(null)
     const [chats,setChats] = useState([])
     const [searchResult , setSearchResult] = useState([])
-    const [newMessage, setNewMessage] = useState<string>("");
-    const [typing,setTyping] = useState<boolean>(false)
-    const [isTyping,setIsTyping] = useState<boolean>(false)
 
 
     async function getUserInfo()  {
@@ -36,7 +33,7 @@ const ChatProvider = ({children}:{children:React.ReactNode}) => {
 
     return(
         <ChatContext.Provider 
-            value={{user, setUser, selectedChat, setSelectedChat, chats, setChats, searchResult,setSearchResult, newMessage, setNewMessage, typing, setTyping, isTyping, setIsTyping}}
+            value={{user, setUser, selectedChat, setSelectedChat, chats, setChats, searchResult,setSearchResult}}
         >
             {children}
         </ChatContext.Provider>

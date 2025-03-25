@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import UserType, { ChatUserType, SenderProps } from '@/types/user'
 
-function Avatar({sender, color}: {sender: SenderProps | ChatUserType | UserType, color:string}) {
+function Avatar({sender, color}: {sender: SenderProps | ChatUserType | UserType, color?:string}) {
 
     function getInitials(sender:any) {
         if(sender.isGroupChat) {

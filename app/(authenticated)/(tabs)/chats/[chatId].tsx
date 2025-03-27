@@ -1,12 +1,12 @@
-import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity, Platform, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatState } from '@/context/ChatProvider';
 import axios from 'axios';
 import { io, Socket } from "socket.io-client";
-import animationData from '@/animations/typing.json'
 import AllChats from '@/components/AllChats';
+import TypingIndicator from '@/components/TypingIndicator';
 
 const ENDPOINT = "https://chat-app-9flg.onrender.com"; 
 let socket: Socket;
@@ -49,7 +49,6 @@ const Page = () => {
       
     } catch (error) {
       console.error("Error fetching messages", error)
-      setLoading(false)
     }
   }
 
@@ -77,7 +76,6 @@ const Page = () => {
 
     } catch (error) {
       console.error("Error in sending Message", error)
-      setNewMessage(newMessage)
     }
   }
 
@@ -106,28 +104,53 @@ const Page = () => {
     })
   })
 
+  const typingHandler = (value:string) => {
+      setNewMessage(value)
+
+      if(!socketConnected) return;
+
+      if(!typing) {
+        setTyping(true)
+        socket.emit("typing", selectedChat._id)
+      }
+
+      let lastTypingTime = new Date().getTime()
+      var timer = 3000
+
+      setTimeout(() => {
+        var timeNow = new Date().getTime()
+        var timeDiff = timeNow - lastTypingTime
+
+        if(timeDiff >=timer && typing){
+          socket.emit("stop typing", selectedChat._id)
+          setTyping(false)
+        }
+      },timer)
+  }
+
   return (
     <View style={{flex:1, alignItems:'center', justifyContent:'space-between', backgroundColor:"white"}}>
-          <View style={{flex:1,width:"100%", height:"100%"}}>
-            <AllChats messages={messages} selectedChat={selectedChat}/>
-          </View>
-
-          <View style={[styles.wrapper, {paddingBottom:OS === "ios" ? bottom-8 : bottom+15}]}>
-            <TextInput 
-              style={styles.field}
-              placeholder='Message....'
-              keyboardType='default'
-              value={newMessage}
-              onChangeText={setNewMessage}
-              autoCapitalize='none'
-              autoCorrect={false}
-              autoFocus={false}
-            />
-                <TouchableOpacity style={styles.outerCircle} onPress={sendMessage}>
-                  <Ionicons name="send" size={24} color="white" />
-                </TouchableOpacity>
-            </View>
-          </View>
+        <View style={{flex:1,width:"100%", height:"100%"}}>
+          <AllChats messages={messages} selectedChat={selectedChat}/>
+        </View>
+        
+        {isTyping && <TypingIndicator />}
+        <View style={[styles.wrapper, {paddingBottom:OS === "ios" ? bottom-8 : bottom+15}]}>
+          <TextInput 
+            style={styles.field}
+            placeholder='Message....'
+            keyboardType='default'
+            value={newMessage}
+            onChangeText={typingHandler}
+            autoCapitalize='none'
+            autoCorrect={false}
+            autoFocus={false}
+          />
+              <TouchableOpacity style={styles.outerCircle} onPress={sendMessage}>
+                <Ionicons name="send" size={24} color="white" />
+              </TouchableOpacity>
+        </View>
+    </View>
   )
 }
 

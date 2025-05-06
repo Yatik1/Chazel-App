@@ -6,23 +6,6 @@ export const getSenderFull = (loggedUser:any, users:any) => {
    return users[0]._id === loggedUser._id ? users[1] : users[0];
 };
 
-export const isSameSenderMargin = (messages: any, m:any, i:any, userId:any) => {
-  
-  if (
-    i < messages.length - 1 &&
-    messages[i + 1].sender._id === m.sender._id &&
-    messages[i].sender._id !== userId
-  )
-    return 23;
-  else if (
-    (i < messages.length - 1 &&
-      messages[i + 1].sender._id !== m.sender._id &&
-      messages[i].sender._id !== userId) ||
-    (i === messages.length - 1 && messages[i].sender._id !== userId)
-  )
-    return "auto";
-  else return "auto";
-};
 
 export const isSameSender = (messages:any, m:any, i:any, userId:any) => {
   return (
